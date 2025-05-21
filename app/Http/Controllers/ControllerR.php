@@ -15,16 +15,17 @@ class ControllerR extends Controller
     
     {    
         $profs = modelProf::all();
-        return view('afficher', compact('profs'));
+        return view('prof.list', compact('profs'));
         
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('formulaire');
+        return view('prof.create');
     }
 
     /**
@@ -33,25 +34,19 @@ class ControllerR extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nom' => 'required',
-            'prenom' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'telephone' => 'required|numeric',
-            'adresse' => 'required',
-            'date_naissance' => 'required|date',
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'email' => 'required|email|unique:profs,email',
+            'matiere' => 'required|string|max:255',
         ]);
-         
-       modelProf::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'telephone' => $request->telephone,
-            'adresse' => $request->adresse,
-            'date_naissance' => $request->date_naissance,
-        ]);
-
-        return redirect()->route('afficher')->with('success', 'Data saved successfully.');
+    
+        modelProf::create($request->all());
+        
+    
+        return redirect('/profs')->with('success', 'Professeur ajouté avec succès.');
     }
+    
+    
 
 
 
@@ -62,9 +57,9 @@ class ControllerR extends Controller
     public function show(string $id)
     {
         $prof = modelProf::find($id);
-        if ($prof) {
+        if ($prof){
             return view('show', compact('prof'));
-        } else {
+        } else{
             return redirect()->route('afficher')->with('error', 'Data not found.');
         }
     }
@@ -76,9 +71,9 @@ class ControllerR extends Controller
     {
         $prof = modelProf::find($id);
         if ($prof) {
-            return view('edit', compact('prof'));
+            return view('prof.edit', compact('prof'));
         } else {
-            return redirect()->route('afficher')->with('error', 'Data not found.');
+            return redirect()->route('prof.list')->with('error', 'Data not found.');
         }
     }
 
@@ -112,6 +107,7 @@ class ControllerR extends Controller
     {
         $prof = modelProf::find($id);
         $prof->delete();
-        return redirect()->route('afficher')->with('success', 'Data deleted successfully.');
+        
+        return redirect()->back()->with('success', 'Data deleted successfully.');
     }
 }
