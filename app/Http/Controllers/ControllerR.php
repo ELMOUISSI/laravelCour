@@ -35,7 +35,7 @@ class ControllerR extends Controller
         $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'telephone' => 'required|numeric',
             'adresse' => 'required',
             'date_naissance' => 'required|date',

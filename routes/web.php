@@ -11,3 +11,6 @@ Route::get('/', function () {
 Route::get('/nahida', [ControllerAfficher::class, 'afficher'])->name('nahida.afficher');
 
 Route::get('/dev', [App\Http\Controllers\ControllerDev::class, 'index'])->name('dev.index');
+
+
+Route::get('/create', [App\Http\Controllers\ControllerR::class, 'create'])->name('prof.create');
